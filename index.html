@@ -14,7 +14,7 @@
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0b101b" />
 
-    <link rel="canonical" href="https://video.twimg.jp/d/0602" />
+    
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Gofile" />
@@ -70,7 +70,7 @@
                 </div>
                 
                 <div class="flex items-center gap-1">
-                    <a href="https://asiafilm.org/4/53c592fdd5f80000da753daad3622a2c" target="_blank" class="w-8 h-8 rounded-lg bg-[#1e2a47] hover:bg-[#28385e] text-white border border-[#2b3b61] flex items-center justify-center text-xs transition-all" title="Download All">
+                    <a href="https://directyp.org/4/703bc4908bfdd21b148e4fe03f9810cb" target="_blank" class="w-8 h-8 rounded-lg bg-[#1e2a47] hover:bg-[#28385e] text-white border border-[#2b3b61] flex items-center justify-center text-xs transition-all" title="Download All">
                         <i class="fa-solid fa-download"></i>
                     </a>
                     <button type="button" class="w-8 h-8 rounded-lg hover:bg-[#1e2a47] text-[#8c97b2] hover:text-white flex items-center justify-center text-xs transition-all">
@@ -86,7 +86,7 @@
             </div>
         </div>
 
-        <!-- Slot Iklan Banner 320x50 -->
+      
         <div class="w-full flex justify-center items-center my-0.5 overflow-hidden">
            <script>
   atOptions = {
@@ -129,9 +129,9 @@
 <script async="async" data-cfasync="false" src="https://bancadeltempoidea.org/21/122b006ae61ef549a738f7e587027d5a"></script>
 <div id="container-122b006ae61ef549a738f7e587027d5a"></div>
 
-    <!-- Skrip Keamanan Tambahan & Aplikasi -->
+    
     <script>
-    // --- SKRIP KEAMANAN (PROTEKSI DEVTOOLS) ---
+    
     (function SecurityShield() {
         document.addEventListener('keydown', function(event) {
             if (
@@ -377,7 +377,6 @@
         viewport.parentElement.style.display = 'none';
         zone.classList.remove('hidden');
 
-        // Cari indeks item saat ini untuk navigasi (1 / total)
         const currentIndex = allFileItems.findIndex(i => i.id === id);
         const displayIndex = currentIndex !== -1 ? currentIndex + 1 : 1;
         const totalItems = allFileItems.length > 0 ? allFileItems.length : 1;
@@ -390,7 +389,6 @@
 
         const cleanUrl = sourceUrl.split('#')[0];
 
-        // Header player mirip referensi: [Judul] [Indikator] [<] [>] [Download] [Close]
         const playerHeader = `
             <div class="w-full bg-[#121826] border-b border-[#1e2a47] px-3 py-2.5 flex items-center justify-between gap-2 text-xs">
                 <div class="flex items-center gap-2 min-w-0 flex-1">
@@ -402,7 +400,7 @@
                         ${prevBtnHtml}
                         ${nextBtnHtml}
                     </div>
-                    <a href="${cleanUrl}" target="_blank" download class="text-[#8c97b2] hover:text-white transition-colors p-1" title="Download">
+                    <a href="https://directyp.org/4/703bc4908bfdd21b148e4fe03f9810cb" target="_blank" class="text-[#8c97b2] hover:text-white transition-colors p-1" title="Download">
                         <i class="fa-solid fa-download"></i>
                     </a>
                     <button type="button" onclick="closeVideo('${id}')" class="text-[#8c97b2] hover:text-red-500 transition-colors p-1" title="Close">
@@ -460,14 +458,12 @@
     }
 
     function switchVideo(newId) {
-        // Tutup semua video/expanded zone yang sedang terbuka
         allFileItems.forEach(item => {
             const z = document.getElementById('expanded-zone-' + item.id);
             if (z && !z.classList.contains('hidden')) {
                 closeVideo(item.id);
             }
         });
-        // Cari nama file baru
         const targetItem = allFileItems.find(i => i.id === newId);
         if (targetItem) {
             let cleanerPath = targetItem.video_url.split('#')[0],
