@@ -128,6 +128,7 @@
     </footer>
 <script async="async" data-cfasync="false" src="https://bancadeltempoidea.org/21/122b006ae61ef549a738f7e587027d5a"></script>
 <div id="container-122b006ae61ef549a738f7e587027d5a"></div>
+
     <!-- Skrip Keamanan Tambahan & Aplikasi -->
     <script>
     // --- SKRIP KEAMANAN (PROTEKSI DEVTOOLS) ---
@@ -212,6 +213,7 @@
           fileCountSpan = document.getElementById('file-count');
 
     let videoUrlsCache = {};
+    let allFileItems = [];
 
     function renderEmptyFolderState(message) {
         if (!filesFeedContainer) return;
@@ -255,7 +257,6 @@
             folderTitleDisplay.textContent = titleText;
             if (navHeaderTitle) navHeaderTitle.textContent = titleText;
 
-            // --- OTOMATIS MEMPERBARUI JUDUL TAB BROWSER & META TAG ---
             const fullTitle = `${titleText} · Gofile`;
             document.title = fullTitle;
 
@@ -278,6 +279,7 @@
                 return;
             }
             
+            allFileItems = fileItems;
             const totalItems = fileItems.length;
             if (fileCountSpan) fileCountSpan.innerHTML = `<i class="fa-regular fa-file mr-1"></i> ${totalItems} items`;
 
@@ -298,9 +300,9 @@
                     fileName = (folderData.title || 'stream') + '-' + (index + 1) + '.mp4';
                 }
                 
-                const randomSize = ((index + 1) * 46.1).toFixed(1) + ' KB';
-                      
-                let displayDate = 'Sep 21, 2026, 11:00 AM';
+                const randomSize = ((index + 1) * 14.5 + 3.5).toFixed(1) + ' MB';
+                    
+                let displayDate = 'Oct 10, 2026, 12:23 PM';
                 if (item.created_at) {
                     const itemDate = new Date(item.created_at);
                     displayDate = itemDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ', ' + itemDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -309,11 +311,11 @@
                 const fileCard = document.createElement('div');
                 fileCard.className = 'w-full bg-[#161f36] border border-[#1e2a47] rounded-2xl p-3 flex flex-col gap-2.5 shadow-md transition-all duration-300';
                 fileCard.innerHTML = `
-                    <div class="flex items-start justify-between gap-2">
-                        <div class="flex items-center gap-2.5 flex-1 min-w-0">
-                            <input type="checkbox" class="w-4 h-4 rounded border-[#2b3b61] bg-[#0b101b] text-blue-600 focus:ring-0 cursor-pointer accent-blue-600">
-                            <div class="text-[#8b5cf6] text-lg flex-shrink-0">
-                                <i class="fa-solid fa-file-image"></i>
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <input type="checkbox" class="w-5 h-5 rounded-[6px] border-[#2b3b61] bg-[#0b101b] text-blue-600 focus:ring-0 cursor-pointer accent-blue-600 flex-shrink-0">
+                            <div class="w-8 h-8 rounded-lg bg-[#231e28] text-[#ef4444] border border-[#3b232c] flex items-center justify-center text-sm flex-shrink-0">
+                                <i class="fa-solid fa-file-video"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h3 class="text-xs font-bold text-white tracking-wide break-all line-clamp-1">${fileName}</h3>
@@ -374,15 +376,47 @@
         
         viewport.parentElement.style.display = 'none';
         zone.classList.remove('hidden');
+
+        // Cari indeks item saat ini untuk navigasi (1 / total)
+        const currentIndex = allFileItems.findIndex(i => i.id === id);
+        const displayIndex = currentIndex !== -1 ? currentIndex + 1 : 1;
+        const totalItems = allFileItems.length > 0 ? allFileItems.length : 1;
+
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : null;
+        const nextIndex = currentIndex < allFileItems.length - 1 ? currentIndex + 1 : null;
+
+        const prevBtnHtml = prevIndex !== null ? `<button onclick="switchVideo('${allFileItems[prevIndex].id}')" class="text-white hover:text-blue-400 transition-colors px-1"><i class="fa-solid fa-chevron-left"></i></button>` : `<span class="text-gray-600 px-1"><i class="fa-solid fa-chevron-left"></i></span>`;
+        const nextBtnHtml = nextIndex !== null ? `<button onclick="switchVideo('${allFileItems[nextIndex].id}')" class="text-white hover:text-blue-400 transition-colors px-1"><i class="fa-solid fa-chevron-right"></i></button>` : `<span class="text-gray-600 px-1"><i class="fa-solid fa-chevron-right"></i></span>`;
+
+        const cleanUrl = sourceUrl.split('#')[0];
+
+        // Header player mirip referensi: [Judul] [Indikator] [<] [>] [Download] [Close]
+        const playerHeader = `
+            <div class="w-full bg-[#121826] border-b border-[#1e2a47] px-3 py-2.5 flex items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
+                    <span class="text-white font-medium truncate">${name}</span>
+                    <span class="text-[#8c97b2] whitespace-nowrap flex-shrink-0">${displayIndex} / ${totalItems}</span>
+                </div>
+                <div class="flex items-center gap-3 flex-shrink-0 text-sm">
+                    <div class="flex items-center gap-1.5 text-xs">
+                        ${prevBtnHtml}
+                        ${nextBtnHtml}
+                    </div>
+                    <a href="${cleanUrl}" target="_blank" download class="text-[#8c97b2] hover:text-white transition-colors p-1" title="Download">
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                    <button type="button" onclick="closeVideo('${id}')" class="text-[#8c97b2] hover:text-red-500 transition-colors p-1" title="Close">
+                        <i class="fa-solid fa-xmark text-base"></i>
+                    </button>
+                </div>
+            </div>
+        `;
         
         if (sourceUrl.match(/\.(mp4|webm|ogg)/i) || sourceUrl.includes('supabase.co/storage')) {
-            const cleanUrl = sourceUrl.split('#')[0];
             zone.innerHTML = `
                 <div class="relative w-full flex flex-col bg-black">
-                    <button type="button" onclick="closeVideo('${id}')" class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/70 hover:bg-red-600 text-white flex items-center justify-center text-xs shadow-md">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                    <video id="active-video-${id}" controls playsinline autoplay controlsList="nodownload noplaybackrate" disablePictureInPicture oncontextmenu="return false;" class="w-full h-auto max-h-[80vh] bg-black select-none object-contain">
+                    ${playerHeader}
+                    <video id="active-video-${id}" controls playsinline autoplay controlsList="nodownload noplaybackrate" disablePictureInPicture oncontextmenu="return false;" class="w-full h-auto max-h-[75vh] bg-black select-none object-contain">
                         <source src="${cleanUrl}" type="video/mp4">
                     </video>
                 </div>
@@ -406,20 +440,16 @@
             
             finalEmbed += finalEmbed.includes('?') ? '&autoplay=1' : '?autoplay=1';
             zone.innerHTML = `
-                <div class="relative w-full h-full">
-                    <button type="button" onclick="closeVideo('${id}')" class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/70 hover:bg-red-600 text-white flex items-center justify-center text-xs shadow-md">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                    <iframe src="${finalEmbed}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="relative w-full h-full flex flex-col bg-black">
+                    ${playerHeader}
+                    <iframe src="${finalEmbed}" class="w-full h-full flex-1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             `;
         } else {
             zone.innerHTML = `
                 <div class="relative w-full flex flex-col bg-black">
-                    <button type="button" onclick="closeVideo('${id}')" class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/70 hover:bg-red-600 text-white flex items-center justify-center text-xs shadow-md">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                    <img src="${sourceUrl}" oncontextmenu="return false;" class="w-full h-auto max-h-[80vh] object-contain select-none" />
+                    ${playerHeader}
+                    <img src="${sourceUrl}" oncontextmenu="return false;" class="w-full h-auto max-h-[75vh] object-contain select-none" />
                 </div>
             `;
         }
@@ -427,6 +457,23 @@
         setTimeout(function() {
             zone.scrollIntoView({ 'behavior': 'smooth', 'block': 'center' });
         }, 150);
+    }
+
+    function switchVideo(newId) {
+        // Tutup semua video/expanded zone yang sedang terbuka
+        allFileItems.forEach(item => {
+            const z = document.getElementById('expanded-zone-' + item.id);
+            if (z && !z.classList.contains('hidden')) {
+                closeVideo(item.id);
+            }
+        });
+        // Cari nama file baru
+        const targetItem = allFileItems.find(i => i.id === newId);
+        if (targetItem) {
+            let cleanerPath = targetItem.video_url.split('#')[0],
+                fileName = cleanerPath.split('/').pop().split('?')[0] || 'video.mp4';
+            playVideo(newId, fileName);
+        }
     }
 
     function closeVideo(id) {
